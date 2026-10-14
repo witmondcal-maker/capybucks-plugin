@@ -1,0 +1,156 @@
+{
+  "source": "Planned capybucks-mcp 0.1.0 contract from the 2026-10-14 plugin plan, section 7.4. This is not a live tools/list capture: capybucks-mcp==0.1.0 was not on PyPI when this snapshot was written.",
+  "tools": [
+    {
+      "name": "list_providers",
+      "description": "List market-data providers, whether a key is configured, and which capabilities each one implements. Never returns the key.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_history",
+      "description": "OHLCV history for one or more symbols. One provider per series. Provenance is per symbol.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbols": {},
+          "period": { "type": "string", "default": "1mo" },
+          "interval": { "type": "string", "default": "1d" },
+          "start": { "type": "string" },
+          "end": { "type": "string" },
+          "auto_adjust": { "type": "boolean", "default": true },
+          "provider": { "type": "string", "enum": ["yahoo", "coingecko", "stooq", "twelvedata"] },
+          "view": { "type": "string", "enum": ["rows", "summary"], "default": "rows" },
+          "max_rows": { "type": "integer", "default": 100 },
+          "use_cache": { "type": "boolean", "default": true }
+        },
+        "required": ["symbols"]
+      }
+    },
+    {
+      "name": "get_quote",
+      "description": "Latest quote. Yahoo and CoinGecko return the last daily bar, not a live print.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "provider": { "type": "string", "enum": ["yahoo", "coingecko", "stooq", "twelvedata"] }
+        },
+        "required": ["symbol"]
+      }
+    },
+    {
+      "name": "get_financials",
+      "description": "Income statement, balance sheet, or cash flow. Item names stay as the source published them.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "statement": { "type": "string", "enum": ["income", "balance", "cashflow"], "default": "income" },
+          "frequency": { "type": "string", "enum": ["annual", "quarterly"], "default": "annual" },
+          "provider": { "type": "string", "enum": ["yahoo", "coingecko", "stooq", "twelvedata"] },
+          "items": { "type": "array", "items": { "type": "string" } },
+          "max_periods": { "type": "integer", "default": 4 }
+        },
+        "required": ["symbol"]
+      }
+    },
+    {
+      "name": "get_dividends_and_splits",
+      "description": "Dividend amounts and split ratios. An empty list is success when the symbol has no events.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "kind": { "type": "string", "enum": ["both", "dividends", "splits"], "default": "both" },
+          "since": { "type": "string" },
+          "max_rows": { "type": "integer", "default": 100 },
+          "provider": { "type": "string", "enum": ["yahoo", "coingecko", "stooq", "twelvedata"] }
+        },
+        "required": ["symbol"]
+      }
+    },
+    {
+      "name": "get_option_expirations",
+      "description": "Option expiration dates as ISO YYYY-MM-DD. Yahoo implements this.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "provider": { "type": "string", "enum": ["yahoo", "coingecko", "stooq", "twelvedata"] }
+        },
+        "required": ["symbol"]
+      }
+    },
+    {
+      "name": "get_option_chain",
+      "description": "Calls and puts for one expiration. Implied volatility and prices are delayed.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "expiration": { "type": "string" },
+          "side": { "type": "string", "enum": ["both", "calls", "puts"], "default": "both" },
+          "near_money": { "type": "boolean", "default": true },
+          "strike_min": { "type": "number" },
+          "strike_max": { "type": "number" },
+          "max_rows": { "type": "integer", "default": 50 },
+          "provider": { "type": "string", "enum": ["yahoo", "coingecko", "stooq", "twelvedata"] }
+        },
+        "required": ["symbol"]
+      }
+    },
+    {
+      "name": "get_news",
+      "description": "Headlines for a symbol. Title text is untrusted third-party data.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "max_items": { "type": "integer", "default": 10 },
+          "provider": { "type": "string", "enum": ["yahoo", "coingecko", "stooq", "twelvedata"] }
+        },
+        "required": ["symbol"]
+      }
+    },
+    {
+      "name": "compute_indicators",
+      "description": "Textbook technical indicators on one downloaded series. Not a trading system.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "indicators": { "type": "array", "items": { "type": "string", "enum": ["sma", "ema", "rsi", "macd", "bollinger", "atr", "vwap"] } },
+          "period": { "type": "string", "default": "6mo" },
+          "interval": { "type": "string", "default": "1d" },
+          "provider": { "type": "string", "enum": ["yahoo", "coingecko", "stooq", "twelvedata"] },
+          "window": { "type": "integer", "default": 20 },
+          "rsi_window": { "type": "integer", "default": 14 },
+          "atr_window": { "type": "integer", "default": 14 },
+          "macd_fast": { "type": "integer", "default": 12 },
+          "macd_slow": { "type": "integer", "default": 26 },
+          "macd_signal": { "type": "integer", "default": 9 },
+          "bands_std": { "type": "number", "default": 2.0 },
+          "last_n": { "type": "integer", "default": 30 }
+        },
+        "required": ["symbol", "indicators"]
+      }
+    },
+    {
+      "name": "check_trading_day",
+      "description": "Whether a calendar date is an exchange session. Does not say if the market is open right now.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "date": { "type": "string" },
+          "calendar": { "type": "string" }
+        },
+        "required": ["symbol"]
+      }
+    }
+  ]
+}
