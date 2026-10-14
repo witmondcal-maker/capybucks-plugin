@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "capybucks": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["capybucks-mcp==0.1.0"],
+      "env": {
+        "CAPYBUCKS_TWELVEDATA_KEY": "${CAPYBUCKS_TWELVEDATA_KEY}",
+        "CAPYBUCKS_MCP_LOG_LEVEL": "WARNING"
+      }
+    }
+  }
+}

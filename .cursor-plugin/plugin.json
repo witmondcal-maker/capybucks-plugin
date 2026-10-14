@@ -1,0 +1,29 @@
+{
+  "name": "capybucks",
+  "displayName": "Capybucks",
+  "version": "0.1.0",
+  "description": "Read-only market data for agents: price history, quotes, financial statements, options, dividends, news and technical indicators, with provider and delay shown on every answer. Not investment advice.",
+  "author": {
+    "name": "Ricardo Margalho",
+    "email": "ricardo@penarede.com.br"
+  },
+  "homepage": "https://witmondcal-maker.github.io/capybucks/",
+  "repository": "https://github.com/witmondcal-maker/capybucks-plugin",
+  "license": "MIT",
+  "logo": "assets/logo.jpg",
+  "keywords": ["finance", "market-data", "ohlcv", "stocks", "crypto", "b3", "options", "indicators", "mcp"],
+  "category": "integrations",
+  "tags": ["finance", "market-data", "mcp", "read-only"],
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "CAPYBUCKS_TWELVEDATA_KEY": {
+        "type": "string",
+        "title": "Twelve Data API key (optional)",
+        "description": "Only needed for provider=twelvedata (FX, paid feed). Leave empty to use Yahoo (stocks) and CoinGecko (crypto). Never commit this value."
+      }
+    }
+  }
+}
