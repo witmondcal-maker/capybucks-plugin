@@ -22,7 +22,7 @@ adds columns the user did not ask for. Pass only the indicators requested.
 Parameters:
 
 - `symbol`: required.
-- `indicators`: list drawn from `sma`, `ema`, `rsi`, `macd`, `bollinger`, `atr`, `vwap`. Required.
+- `indicators`: optional list drawn from `sma`, `ema`, `rsi`, `macd`, `bollinger`, `atr`, `vwap`. Default `sma` and `rsi`.
 - `period`: default `6mo`. Same period names as `get_history`.
 - `interval`: default `1d`.
 - `provider`: optional.
@@ -39,8 +39,8 @@ Formulas, matching the library:
 - SMA: rolling mean, `min_periods` equal to the window.
 - EMA: `span` equal to `window`, `adjust` false.
 - RSI: Wilder smoothing, `alpha` = 1 / `rsi_window`.
-- MACD: fast EMA minus slow EMA, then an EMA signal. Columns `macd`, `signal`, `histogram`.
-- Bollinger: `mid`, `upper`, `lower` from SMA plus or minus `bands_std` times the rolling standard deviation.
+- MACD: fast EMA minus slow EMA, then an EMA of that line. Columns `macd`, `macd_signal`, `macd_histogram`. The column `macd_signal` is the signal line. The parameter `macd_signal` above is the signal window (default 9).
+- Bollinger: columns `bb_mid`, `bb_upper`, `bb_lower`, from the SMA plus or minus `bands_std` times the rolling standard deviation.
 - ATR: true range, then Wilder smoothing with `atr_window`.
 - VWAP: cumulative typical price `(high + low + close) / 3` weighted by volume.
 
@@ -54,10 +54,4 @@ Cite the history `provenance` (`provider`, `delayed`, `asof`) with the indicator
 - `delayed`
 - `asof`
 
-Portuguese notice:
-
-> Dados informativos, podem estar atrasados e vir de fontes não oficiais. Isto não é recomendação de investimento. O plugin é somente leitura e não executa ordens.
-
-English `notice` from the server:
-
-> Informational data. May be delayed. Not investment advice. Read-only.
+Every response carries a server `notice`. It says the data may be delayed, may come from unofficial sources, is not investment advice, and that the server is read-only and does not place orders. Repeat that content in the user's language. In Portuguese, say that the figures are informational, may be delayed, may come from unofficial sources, are not investment advice, and that the plugin is read-only and does not place orders.

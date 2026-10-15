@@ -10,4 +10,4 @@ First marketplace plugin.
 - 512×512 logo derived from the library's `docs/assets/logo.jpg`.
 - Layout tests for the manifest, skill frontmatter, variables, and cross-references.
 
-The server package is published from `capybucks-mcp`. This plugin does not vendor that code.
+The server package is built in `capybucks-mcp`. It was not on PyPI on 2026-10-15 (`https://pypi.org/pypi/capybucks-mcp/json` returned 404). This plugin does not vendor that code.

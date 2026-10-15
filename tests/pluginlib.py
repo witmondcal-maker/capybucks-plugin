@@ -9,12 +9,11 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
-NOTICE_PT = (
-    "Dados informativos, podem estar atrasados e vir de fontes não oficiais. "
-    "Isto não é recomendação de investimento. O plugin é somente leitura e "
-    "não executa ordens."
+NOTICE_DESCRIPTION = (
+    "may come from unofficial sources, is not investment advice, "
+    "and that the server is read-only and does not place orders"
 )
-NOTICE_EN = "Informational data. May be delayed. Not investment advice. Read-only."
+SHORT_NOTICE = "Informational data. May be delayed. Not investment advice. Read-only."
 
 EXPECTED_SKILLS = (
     "capybucks-overview",

@@ -19,7 +19,7 @@ Parameters:
 
 - `symbols`: one string or a list, at most 10. Required.
 - `period`: `1d`, `5d`, `1mo`, `3mo`, `6mo`, `1y`, `2y`, `5y`, `10y`, `max`, `ytd`. Default `1mo`. Ignored when `start` is set. Any other value is `invalid_argument`.
-- `interval`: default `1d`. Yahoo accepts `1m`, `2m`, `5m`, `15m`, `30m`, `60m`, `90m`, `1h`, `1d`, `5d`, `1wk`, `1w`, `1mo`. Twelve Data accepts `1m`, `5m`, `15m`, `30m`, `1h`, `1d`, `1wk`, `1w`, `1mo`. CoinGecko accepts `1d` and `1h`. Stooq accepts `1d`, `1wk`, `1w`, `1mo`. An unsupported interval is `provider_error`, not a resample.
+- `interval`: default `1d`. Yahoo accepts `1m`, `2m`, `5m`, `15m`, `30m`, `60m`, `90m`, `1h`, `1d`, `5d`, `1wk`, `1w`, `1mo`. Twelve Data accepts `1m`, `5m`, `15m`, `30m`, `1h`, `1d`, `1wk`, `1w`, `1mo`. CoinGecko accepts `1d` and `1h`. Stooq accepts `1d`, `1wk`, `1w`, `1mo`. When `provider` is set, an interval outside that list is `invalid_argument` (the server checks the interval before the call). When `provider` is omitted, the server skips that check and the library can return `provider_error`. The server does not resample.
 - `start`, `end`: ISO 8601. A naive datetime is read as UTC. `end` defaults to now.
 - `auto_adjust`: default `true`. On Yahoo, `close` is then the split-and-dividend adjusted close. Say that when you quote a return.
 - `provider`: optional enum `yahoo`, `coingecko`, `stooq`, `twelvedata`.
@@ -54,10 +54,4 @@ There is no streaming tool. Do not describe either quote as real time.
 - `delayed`
 - `asof`
 
-Portuguese notice:
-
-> Dados informativos, podem estar atrasados e vir de fontes não oficiais. Isto não é recomendação de investimento. O plugin é somente leitura e não executa ordens.
-
-English `notice` from the server:
-
-> Informational data. May be delayed. Not investment advice. Read-only.
+Every response carries a server `notice`. It says the data may be delayed, may come from unofficial sources, is not investment advice, and that the server is read-only and does not place orders. Repeat that content in the user's language. In Portuguese, say that the figures are informational, may be delayed, may come from unofficial sources, are not investment advice, and that the plugin is read-only and does not place orders.

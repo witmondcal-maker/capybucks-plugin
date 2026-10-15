@@ -31,11 +31,11 @@ Stooq is daily CSV from `stooq.com` and often returns an HTML bot-check. That is
 
 ## Crypto and FX
 
-CoinGecko maps ids for `BTC`, `ETH`, and `SOL` (and the `-USD` / `USD` forms). Any other crypto symbol is sent as `symbol.lower()` and often fails. Say that before calling for `DOGE`, `XRP`, or `ADA`. CoinGecko does not provide volume. `get_history` returns `volume: null` plus a warning. The public CoinGecko limit is tight (about one second between calls).
+CoinGecko maps ids for `BTC`, `ETH`, and `SOL`, plus `BTC-USD`, `BTCUSD`, `ETH-USD`, `ETHUSD`, and `SOL-USD`. `SOLUSD` is not mapped. Any other crypto symbol is sent as `symbol.lower()` to `/coins/{id}/ohlc`. CoinGecko often answers HTTP 200 with a different coin. On 2026-10-14 the server notes record that `doge` returned a price on the order of 4.6e-5, while `dogecoin` was about 0.084. The tool payload has no CoinGecko `id` and no coin `name`. `data.symbol` on `get_quote` is the ticker you sent, uppercased. That echo is not the resolved asset. When the unmapped-id warning is present, tell the user the series may be a different coin and do not present the price as the coin they named. Pass the warning through. Say this before calling for `DOGE`, `XRP`, or `ADA`. CoinGecko does not provide volume. `get_history` returns `volume: null` plus a warning. The public CoinGecko limit is tight (about one second between calls).
 
 A symbol containing `-` is inferred as crypto. `BRK-B` needs `provider` `yahoo`.
 
-`EUR/USD` and any `BASE/QUOTE` symbol have no default. Calling without `provider` returns `no_provider`. Retry only with `provider` `twelvedata` after the key is configured. Do not send FX to Yahoo.
+The server refuses `/`, `..`, `?`, `#`, spaces, and control characters in a symbol. That is `invalid_argument`. `EUR/USD` contains `/`, so do not send it and do not invent another spelling. Tell the user the server will not accept the slash. A symbol the server still classifies as FX, called without `provider`, returns `no_provider`. FX has no default. Twelve Data is the FX provider and needs the key. Do not send FX to Yahoo.
 
 ## Where the key lives
 
@@ -56,10 +56,4 @@ Polygon is not implemented.
 - `delayed`
 - `asof`
 
-Portuguese notice:
-
-> Dados informativos, podem estar atrasados e vir de fontes não oficiais. Isto não é recomendação de investimento. O plugin é somente leitura e não executa ordens.
-
-English `notice` from the server:
-
-> Informational data. May be delayed. Not investment advice. Read-only.
+Every response carries a server `notice`. It says the data may be delayed, may come from unofficial sources, is not investment advice, and that the server is read-only and does not place orders. Repeat that content in the user's language. In Portuguese, say that the figures are informational, may be delayed, may come from unofficial sources, are not investment advice, and that the plugin is read-only and does not place orders.

@@ -8,7 +8,7 @@
       "skill": "capybucks-price-history",
       "tool": "get_history",
       "args": { "symbols": "PETR4.SA", "period": "3mo", "view": "summary" },
-      "notes": "Bare PETR4 raises symbol_not_found with hint PETR4.SA. Tell the user, then retry. Cite provider, delayed, and asof."
+      "notes": "Bare PETR4 is four letters plus a digit. Call Yahoo as PETR4.SA on the first try and tell the user. Do not wait for details.hint. A Yahoo 404 is provider_error with no hint. Cite provider, delayed, and asof."
     },
     {
       "id": "petr4-history-3mo-en",
@@ -16,7 +16,7 @@
       "skill": "capybucks-b3-brazil",
       "tool": "get_history",
       "args": { "symbols": "PETR4.SA", "period": "3mo" },
-      "notes": "Same .SA hint as the Portuguese prompt."
+      "notes": "Same .SA rule as the Portuguese prompt. The agent applies the suffix. The server does not send it on a Yahoo 404."
     },
     {
       "id": "aapl-quote",
@@ -32,7 +32,7 @@
       "skill": "capybucks-b3-brazil",
       "tool": "get_quote",
       "args": { "symbol": "VALE3.SA" },
-      "notes": "Retry with the hint. Expect currency BRL and timezone America/Sao_Paulo."
+      "notes": "Call VALE3.SA on the first try. Expect currency BRL and timezone America/Sao_Paulo."
     },
     {
       "id": "aapl-quarterly-balance",
