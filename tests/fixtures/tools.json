@@ -1,5 +1,5 @@
 {
-  "source": "Planned capybucks-mcp 0.1.0 contract from the 2026-10-14 plugin plan, section 7.4. This is not a live tools/list capture: capybucks-mcp==0.1.0 was not on PyPI when this snapshot was written.",
+  "source": "Tool names and compute_indicators required-fields reconciled with capybucks-mcp commit d636827 (2026-10-14) on 2026-10-15. indicators is optional and defaults to sma and rsi. This is not a live tools/list capture: capybucks-mcp==0.1.0 was not on PyPI.",
   "tools": [
     {
       "name": "list_providers",
@@ -118,7 +118,7 @@
     },
     {
       "name": "compute_indicators",
-      "description": "Textbook technical indicators on one downloaded series. Not a trading system.",
+      "description": "Textbook technical indicators on one downloaded series. indicators defaults to sma and rsi. Not a trading system.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -136,7 +136,7 @@
           "bands_std": { "type": "number", "default": 2.0 },
           "last_n": { "type": "integer", "default": 30 }
         },
-        "required": ["symbol", "indicators"]
+        "required": ["symbol"]
       }
     },
     {

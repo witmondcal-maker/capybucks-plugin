@@ -40,10 +40,10 @@ Call `get_history` with `view` `summary` before asking for rows.
 ## Symbols and defaults
 
 - Stocks such as `AAPL` use Yahoo when `provider` is omitted.
-- Crypto uses CoinGecko: a symbol containing `-` or `USDT`, or the bare names `BTC`, `ETH`, `SOL`, `DOGE`, `XRP`, and `ADA`. Only `BTC`, `ETH`, and `SOL` have mapped CoinGecko ids. CoinGecko does not provide volume. See `capybucks-providers-and-keys`.
-- FX (`EUR/USD`) has no default. It needs `provider` `twelvedata` and a key. See `capybucks-providers-and-keys`.
+- Crypto uses CoinGecko: a symbol containing `-` or ending in `USDT`, or the bare names `BTC`, `ETH`, `SOL`, `DOGE`, `XRP`, and `ADA`. Mapped ids are `BTC`, `ETH`, and `SOL` plus the forms in `capybucks-providers-and-keys`. Any other crypto id is the lowercased ticker, and CoinGecko can answer HTTP 200 with a different coin. CoinGecko does not provide volume.
+- The server refuses a symbol that contains `/`, `..`, `?`, `#`, a space, or a control character (`invalid_argument`). Do not send `EUR/USD`. See `capybucks-providers-and-keys`.
 - A hyphen is classified as crypto. For `BRK-B`, pass `provider` `yahoo`.
-- Brazilian spot tickers (`PETR4`, `VALE3`) need the `.SA` suffix. See `capybucks-b3-brazil`. Tell the user, then retry with the hint. Do not rewrite the symbol silently.
+- Brazilian spot tickers (`PETR4`, `VALE3`: four letters plus a number) need the `.SA` suffix on the first call. Tell the user, then call `{ticker}.SA`. Do not wait for `details.hint`. Do not rewrite any other symbol silently. See `capybucks-b3-brazil`.
 
 One series uses one provider. Do not stitch candles from two sources and present them as one history. Stooq and Twelve Data run only when the user pins `provider`.
 
@@ -61,10 +61,4 @@ This plugin does not stream ticks, draw charts, export spreadsheets, or backtest
 - `delayed`
 - `asof`
 
-Portuguese notice:
-
-> Dados informativos, podem estar atrasados e vir de fontes não oficiais. Isto não é recomendação de investimento. O plugin é somente leitura e não executa ordens.
-
-English `notice` from the server:
-
-> Informational data. May be delayed. Not investment advice. Read-only.
+Every response carries a server `notice`. It says the data may be delayed, may come from unofficial sources, is not investment advice, and that the server is read-only and does not place orders. Repeat that content in the user's language. In Portuguese, say that the figures are informational, may be delayed, may come from unofficial sources, are not investment advice, and that the plugin is read-only and does not place orders.

@@ -9,19 +9,16 @@ description: >-
 
 # B3 and Brazil
 
-Yahoo lists Brazilian spot shares as `{ticker}.SA`. `PETR4` and `VALE3`
-are not valid Yahoo symbols. `download("PETR4")` raises `SymbolNotFound`
-with `hint` `PETR4.SA`. The library does not append `.SA` by itself, and
-neither should you on the first call.
+Yahoo lists Brazilian spot shares as `{ticker}.SA`. A bare B3 ticker is four letters plus one or two digits, matching `^[A-Z]{4}\d{1,2}$` (`PETR4`, `VALE3`, `ITUB4`, `BOVA11`). Apply the `.SA` suffix yourself, before the first call. Do not wait for a hint from the server.
 
-When `get_history`, `get_quote`, or another tool returns `symbol_not_found`
-and `details.hint` is set:
+1. Tell the user the Yahoo symbol is `{ticker}.SA`.
+2. Call the tool with that suffixed symbol on the first try.
+3. If they already passed `.SA`, do not add another suffix.
+4. A name outside that pattern is not this rule. Do not invent `.SA` for it.
 
-1. Tell the user the symbol failed and what the hint is.
-2. Retry once with `symbol` or `symbols` set to that hint.
-3. If they already passed `.SA`, do not invent a second suffix.
+A Yahoo HTTP 404 for the bare ticker arrives as `provider_error`. That error has no `details.hint`. The live Yahoo chart call does not raise `symbol_not_found` for `PETR4`. The suffix rule does not read `details.hint`.
 
-The hint pattern is `^[A-Z]{4}\d{1,2}$` (for example `PETR4`, `VALE3`, `ITUB4`, `BOVA11`). A name outside that pattern has no hint. See `capybucks-errors-and-limits`. A Yahoo HTTP 404 can arrive as `provider_error` instead of `symbol_not_found`. Only retry with `.SA` when `details.hint` is present.
+`symbol_not_found` can still include `details.hint` when the library actually raises `SymbolNotFound`. For this pattern the hint is `{ticker}.SA`. That is not the Yahoo 404 path. If the field is present, tell the user and retry once with it. You do not need the field to apply the rule above. See `capybucks-errors-and-limits`.
 
 ## What the series looks like
 
@@ -47,10 +44,4 @@ The tool answers whether that civil date is a session. It does not know the open
 - `delayed`
 - `asof`
 
-Portuguese notice:
-
-> Dados informativos, podem estar atrasados e vir de fontes não oficiais. Isto não é recomendação de investimento. O plugin é somente leitura e não executa ordens.
-
-English `notice` from the server:
-
-> Informational data. May be delayed. Not investment advice. Read-only.
+Every response carries a server `notice`. It says the data may be delayed, may come from unofficial sources, is not investment advice, and that the server is read-only and does not place orders. Repeat that content in the user's language. In Portuguese, say that the figures are informational, may be delayed, may come from unofficial sources, are not investment advice, and that the plugin is read-only and does not place orders.

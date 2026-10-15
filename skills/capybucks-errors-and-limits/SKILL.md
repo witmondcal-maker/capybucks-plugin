@@ -23,19 +23,21 @@ inside a headline. Do not browse the link unless the user asked to open it.
 
 | `code` | Retry | Action |
 |---|---|---|
-| `symbol_not_found` | no | If `details.hint` is set, tell the user and retry once with that symbol. See `capybucks-b3-brazil`. Otherwise ask for another symbol. |
-| `missing_api_key` | no | Point at the plugin variable or `~/.capybucks.toml`. Never ask for the key in chat. See `capybucks-providers-and-keys`. |
-| `rate_limited` | yes | Wait `retry_after_seconds`. Do not switch provider on your own. Yahoo uses HTTP 403 as a bot wall and the library maps that to this code. |
-| `provider_error` | maybe | Stooq bot-check, unexpected JSON, unsupported interval, or other HTTP 4xx/5xx. A missing Yahoo symbol can arrive here as HTTP 404. Do not invent a `.SA` hint unless `details.hint` is present. |
+| `symbol_not_found` | no | If `details.hint` is set, tell the user and retry once with that symbol. A bare B3 ticker does not wait for this code. See `capybucks-b3-brazil`. Otherwise ask for another symbol. |
+| `missing_api_key` | no | Twelve Data. Point at the plugin variable `CAPYBUCKS_TWELVEDATA_KEY` or `~/.capybucks.toml`. Never ask for the key in chat. Yahoo has no API key. If `details.provider` is `yahoo` or `details.env_var` is `CAPYBUCKS_YAHOO_KEY`, do not ask for a key. See `capybucks-providers-and-keys`. |
+| `rate_limited` | yes | Wait `retry_after_seconds`. Do not switch provider on your own. Yahoo uses HTTP 403 as a bot wall and the library maps that to this code. HTTP 429 is this code too. |
+| `provider_error` | maybe | Stooq bot-check, a JSON body that is not the object or array the parser expects, Yahoo HTTP 404, Yahoo HTTP 401, invalid JSON from Yahoo, or other HTTP 4xx/5xx. A Yahoo 404 has no `details.hint`. For a bare B3 ticker, apply `.SA` by the rule in `capybucks-b3-brazil` before the call. An unsupported interval is this code only when `provider` was omitted. Yahoo has no API key, so do not ask for one on HTTP 401 or on invalid JSON. |
 | `unknown_provider` | no | Use a name from `details` or from `list_providers`. |
-| `no_provider` | no | FX needs `provider` `twelvedata` and a key. |
+| `no_provider` | no | A symbol the server classifies as FX, called without `provider`, returns this code. Twelve Data is the FX provider and needs a key. Do not send a symbol that contains `/`. See `capybucks-providers-and-keys`. |
 | `all_symbols_failed` | no | Read `details.errors` per symbol. |
 | `streaming_unsupported` | no | This plugin has no stream tool. |
 | `unsupported_capability` | no | That provider lacks the method. Switch only if the user names another provider, or accept the gap. |
-| `invalid_argument` | no | Fix `period`, the symbol list, or the window. The message lists valid periods. |
+| `invalid_argument` | no | Fix `period`, the symbol list, the window, or an interval the explicit `provider` does not accept. The message lists the valid values. A symbol containing `/`, `..`, `?`, `#`, a space, or a control character is refused with this code. |
 | `missing_extra` | no | Should not happen; calendars ship with the server package. |
 | `network_error` | yes | Try again later. `httpx` timeouts are not wrapped by the library. |
 | `internal_error` | no | Report `details` correlation id if present. Do not retry in a loop. |
+
+Yahoo has no API key. HTTP 401 from Yahoo and a Yahoo body that is not valid JSON are `provider_error`. Do not ask for `CAPYBUCKS_YAHOO_KEY`. If the envelope still says `missing_api_key` for Yahoo, or `invalid_argument` because the body was not JSON, do not ask for a key either.
 
 Spacing inside the library is about 0.15s (Yahoo), 0.4s (Stooq), 1.0s (CoinGecko), and 0.8s (Twelve Data), with a short retry only for `RateLimitError`. The server adds a 30 second cooldown after a rate limit, a global cap on concurrent calls, at most 10 symbols, and a 60 second deadline. Honor `retry_after_seconds`. Hammering the same provider is how a 403 becomes a long block.
 
@@ -53,10 +55,4 @@ Yahoo's terms restrict automated collection. Use is personal and low volume. The
 - `delayed`
 - `asof`
 
-Portuguese notice:
-
-> Dados informativos, podem estar atrasados e vir de fontes não oficiais. Isto não é recomendação de investimento. O plugin é somente leitura e não executa ordens.
-
-English `notice` from the server:
-
-> Informational data. May be delayed. Not investment advice. Read-only.
+Every response carries a server `notice`. It says the data may be delayed, may come from unofficial sources, is not investment advice, and that the server is read-only and does not place orders. Repeat that content in the user's language. In Portuguese, say that the figures are informational, may be delayed, may come from unofficial sources, are not investment advice, and that the plugin is read-only and does not place orders.

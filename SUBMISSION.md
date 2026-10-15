@@ -1,6 +1,16 @@
 # Checklist de submissão
 
-Baseada na checklist de <https://cursor.com/docs/reference/plugins> (lida em 2026-10-14) e na seção 11 do plano. **Não enviar ao marketplace a partir deste repositório.** O formulário em <https://cursor.com/marketplace/publish> fica com a conta do Ricardo.
+**Este plugin depende de publicar `capybucks-mcp` 0.1.0 no PyPI.** Em 2026-10-15, `https://pypi.org/pypi/capybucks-mcp/json` respondia 404. O pacote não está publicado. Não afirmar o contrário.
+
+Antes de submeter, nesta ordem:
+
+1. Publicar `capybucks-mcp` 0.1.0 no PyPI (o pin do `mcp.json` não muda neste repositório).
+2. Rodar o job manual `pypi-pin` (`workflow_dispatch`). Ele só passa depois da publicação.
+3. Testar o plugin no Cursor (`~/.cursor/plugins/local/capybucks`) e no Grok Bot.
+
+**Não enviar ao marketplace a partir deste repositório.**
+
+Baseada na checklist de <https://cursor.com/docs/reference/plugins> (lida em 2026-10-14) e na seção 11 do plano. O formulário em <https://cursor.com/marketplace/publish> fica com a conta do Ricardo. Privacidade do plugin e do servidor: `PRIVACY.md`.
 
 Itens que este repositório já cobre:
 
@@ -12,7 +22,8 @@ Itens que este repositório já cobre:
 - [x] A única `${VAR}` do `mcp.json` (`CAPYBUCKS_TWELVEDATA_KEY`) está em `variables`. Nenhum segredo no repositório.
 - [x] Caminhos do manifesto são relativos, sem `..` e sem caminho absoluto.
 - [x] Logo em `assets/logo.jpg`, caminho relativo, 512×512, abaixo de 100 KB.
-- [x] `README.md` explica instalação, pré-requisito `uv`, variável opcional, as 10 ferramentas, hosts de saída, avisos legais e como reportar problema (pt-BR e EN).
+- [x] `README.md` explica instalação, pré-requisito `uv`, variável opcional, as 10 ferramentas, hosts de saída, avisos legais e como reportar problema (pt-BR e EN). O topo avisa que o plugin depende de publicar o MCP no PyPI.
+- [x] `PRIVACY.md` na raiz, em português e em inglês, alinhado ao código do MCP conferido em 2026-10-15.
 - [x] `LICENSE` MIT com a nota de que a licença não cobre os dados dos provedores.
 - [x] `SECURITY.md` com canal de reporte (e-mail e advisory privado).
 - [x] `category` é `integrations`, o mesmo valor dos plugins oficiais `github` e `finance` em `cursor/plugins`. O schema aceita string livre. A página `cursor.com/marketplace/publish` não expôs um enum legível na leitura de 2026-10-14.

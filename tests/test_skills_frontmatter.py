@@ -2,7 +2,13 @@
 
 from __future__ import annotations
 
-from pluginlib import EXPECTED_SKILLS, NOTICE_EN, NOTICE_PT, SKILLS, split_frontmatter
+from pluginlib import (
+    EXPECTED_SKILLS,
+    NOTICE_DESCRIPTION,
+    SHORT_NOTICE,
+    SKILLS,
+    split_frontmatter,
+)
 
 PT_TRIGGERS = {
     "capybucks-overview": "histórico",
@@ -27,8 +33,8 @@ def test_each_skill_has_name_description_and_notices():
         assert isinstance(description, str) and description.strip()
         assert "use when" in description.lower()
         assert PT_TRIGGERS[name].lower() in description.lower()
-        assert NOTICE_PT in text
-        assert NOTICE_EN in text
+        assert NOTICE_DESCRIPTION in text
+        assert SHORT_NOTICE not in text
         assert "`provider`" in text
         assert "`delayed`" in text
         assert "`asof`" in text

@@ -1,5 +1,9 @@
 # Capybucks
 
+**Antes de submeter ao marketplace:** este plugin só funciona depois que `capybucks-mcp` 0.1.0 estiver publicado no PyPI. Em 2026-10-15, `https://pypi.org/pypi/capybucks-mcp/json` respondia 404. O pacote não está publicado. Antes de enviar é preciso: publicar `capybucks-mcp` 0.1.0 no PyPI, rodar o job manual `pypi-pin`, e testar o plugin no Cursor e no Grok Bot. Privacidade: `PRIVACY.md`.
+
+**Before marketplace submission:** this plugin works only after `capybucks-mcp` 0.1.0 is published on PyPI. On 2026-10-15, `https://pypi.org/pypi/capybucks-mcp/json` returned 404. It is not published. Before you submit: publish `capybucks-mcp` 0.1.0 on PyPI, run the manual `pypi-pin` job, and test the plugin in Cursor and in Grok Bot. Privacy: `PRIVACY.md`.
+
 Read-only market data for agents: price history, quotes, financial statements, options, dividends, news and technical indicators, with provider and delay shown on every answer. Not investment advice.
 
 Plugin version **0.1.0** starts the stdio server `capybucks-mcp==0.1.0`. The server package lives in [capybucks-mcp](https://github.com/witmondcal-maker/capybucks-mcp). The library lives in [capybucks](https://github.com/witmondcal-maker/capybucks). This repository is the marketplace plugin: manifest, skills, and the `uvx` pin. It does not contain the Python server.
@@ -57,13 +61,15 @@ The server calls only these hosts:
 - `api.twelvedata.com`
 - `stooq.com`
 
-The only local write is the library's parquet cache at `~/.cache/capybucks` (or `CAPYBUCKS_CACHE_DIR`). There is no telemetry.
+The only local write is the library's parquet cache at `~/.cache/capybucks` (or `CAPYBUCKS_CACHE_DIR`). There is no telemetry. See `PRIVACY.md`.
 
 ### Legal
 
 The software is MIT. The data is not. Yahoo's terms restrict automated collection. Do not redistribute provider data. Twelve Data plan limits belong to Twelve Data. CoinGecko's public API is rate limited; read that provider's terms and attribution rules before you depend on it. `delayed: true` means the figure is not real time. Nothing in this plugin is financial, legal, or tax advice. Indicator results are textbook formulas.
 
-> Informational data. May be delayed. Not investment advice. Read-only.
+The server field `notice`, copied from `capybucks-mcp` `envelope.py` at commit `d636827` (2026-10-14):
+
+> Informational data. May be delayed and may come from unofficial sources. Not investment advice. Read-only; this server does not place orders.
 
 ### Version pin
 
@@ -101,13 +107,13 @@ Copie este repositório para `~/.cursor/plugins/local/capybucks`. Symlink só va
 
 ### Rede e disco
 
-Hosts de saída: `query1.finance.yahoo.com`, `api.coingecko.com`, `api.twelvedata.com`, `stooq.com`. A única escrita local é o cache parquet em `~/.cache/capybucks` (ou `CAPYBUCKS_CACHE_DIR`). Sem telemetria.
+Hosts de saída: `query1.finance.yahoo.com`, `api.coingecko.com`, `api.twelvedata.com`, `stooq.com`. A única escrita local é o cache parquet em `~/.cache/capybucks` (ou `CAPYBUCKS_CACHE_DIR`). Sem telemetria. Detalhe em `PRIVACY.md`.
 
 ### Aviso legal
 
 A licença MIT cobre o software. Os dados seguem os termos de cada provedor e não estão licenciados para redistribuição por este pacote. A Yahoo restringe coleta automatizada. Os limites da Twelve Data são do plano dela. O CoinGecko público tem limite apertado; leia os termos e a regra de atribuição desse provedor antes de depender dele. `delayed: true` não é tempo real. Nada aqui é aconselhamento financeiro, jurídico ou tributário. Indicadores são fórmulas de livro.
 
-> Dados informativos, podem estar atrasados e vir de fontes não oficiais. Isto não é recomendação de investimento. O plugin é somente leitura e não executa ordens.
+O campo `notice` do servidor está em inglês e diz que os dados podem estar atrasados, podem vir de fontes não oficiais, não são recomendação de investimento, e que o servidor é somente leitura e não envia ordens. O texto exato está na seção em inglês acima. Veja também `PRIVACY.md`.
 
 ### Logo
 
